@@ -19,7 +19,7 @@
       *                                                                *
       *                                                                *
       *   ray lam 03/08 verify                                         *
-      *   SAJ
+      *   SAJ 1                                                        *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LGICDB01.
