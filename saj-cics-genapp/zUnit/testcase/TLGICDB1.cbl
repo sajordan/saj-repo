@@ -1,0 +1,146 @@
+       PROCESS NODLL,NODYNAM,TEST(NOSEP),NOCICS,NOSQL,PGMN(LU)
+      *+---------------------------------------------------------------+
+      *| ZUNIT PROGRAM FOR EXEC SQL SELECT_INTO                        |
+      *|    FUNCTION CODE: 00E7                                        |
+      *| TEST CASE VERSION: 100                                        |
+      *+---------------------------------------------------------------+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. 'DB2_00E7_LGICDB01'.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 BZ-ASSERT.
+         03 MESSAGE-LEN PIC S9(4) COMP-4 VALUE 24.
+         03 MESSAGE-TXT PIC X(254) VALUE 'HELLO FROM DB2 CALLBACK'.
+       01  BZ-P1 PIC S9(9) COMP-4 VALUE 4.
+       01  BZ-P2 PIC S9(9) COMP-4 VALUE 2001.
+       01  BZ-P3 PIC X(3) VALUE 'AZU'.
+       01 BZ-TRACE.
+         03 TRACE-LEN       PIC S9(4) COMP-4 VALUE 5.
+         03 TRACE-TXT       PIC X(254) VALUE 'TRACE'.
+       01 BZUASSRT          PIC X(8) VALUE 'BZUASSRT'.
+       01 BZUTRACE          PIC X(8) VALUE 'BZUTRACE'.
+       01 AZ-TRACE-PTR      POINTER.
+       01 AZ-TEST-LEN        PIC S9(8) COMP.
+       01 AZ-RECORD.
+         03 AZ-RECORD-COUNT-OT OCCURS 1 PIC 9(5) COMP-5 VALUE 0.
+         03 AZ-RECORD-COUNT-IN OCCURS 1 PIC 9(5) COMP-5 VALUE 0.
+         03 AZ-OUT-PARM-NUM  PIC 9(8).
+         03 AZ-IN-PARM-NUM   PIC 9(8).
+         03 AZ-STMT-NUM      PIC 9(9).
+       01 AZ-GRP-INDEX       PIC 9(8).
+       01 AZ-FLAG-IN         PIC 9(1).
+       01 AZ-RECORD-PTR      POINTER.
+       01 AZ-RC-WORK         PIC S9(4) USAGE BINARY.
+       LOCAL-STORAGE SECTION.
+       01 AZ-HOSTVAR-PTR     POINTER.
+       01 AZ-HOSTVAR-PTR-ADDR
+           REDEFINES AZ-HOSTVAR-PTR PIC 9(9) COMP-5.
+       LINKAGE SECTION.
+       01 AZ-TEST            PIC X(80).
+       01 AZ-INFO-BLOCK.
+          COPY BZUITERC.
+       01 AZ-APLIST.
+          COPY BZUDB2CP.
+       01 AZ-WK-RECORD-COUNT PIC 9(5) COMP-5.
+       01 ARGO1.
+          COPY BZUDB2CV.
+       01 ARGI1          .
+          COPY BZUDB2CV.
+       01 ARGI2          .
+          COPY BZUDB2CV.
+       01 ARGI3          .
+          COPY BZUDB2CV.
+       01 ARGI4          .
+          COPY BZUDB2CV.
+       01 ARGI5          .
+          COPY BZUDB2CV.
+       01 ARGI6          .
+          COPY BZUDB2CV.
+       01 ARGI7          .
+          COPY BZUDB2CV.
+       01 ARGI8          .
+          COPY BZUDB2CV.
+       01 ARGI9          .
+          COPY BZUDB2CV.
+       01 AZ-SQLDA.
+          COPY BZUDB2CA.
+       PROCEDURE DIVISION.
+      * CHECK OUTPUT VALUE
+      * DB2_INPT_00E7_LGICDB01.
+           ENTRY 'DB2_INPT_00E7_LGICDB01' USING AZ-TEST
+           AZ-INFO-BLOCK AZ-APLIST ARGO1.
+           DISPLAY 'AZU0000I DB2_00E7_LGICDB01 CHECK VALUES...'
+           MOVE 4 TO RETURN-CODE.
+           MOVE SQL-STMT-NUM OF AZ-APLIST TO AZ-STMT-NUM
+           SET ADDRESS OF AZ-SQLDA TO SQL-VPARMPTR
+           MOVE SQLDA-NUM OF AZ-SQLDA TO AZ-OUT-PARM-NUM
+           SET ADDRESS OF AZ-SQLDA TO SQL-APARMPTR
+           MOVE SQLDA-NUM OF AZ-SQLDA TO AZ-IN-PARM-NUM
+           MOVE 0 TO AZ-TEST-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+      * EXEC SQL SELECT_INTO : OUT=1 IN=9
+           IF AZ-OUT-PARM-NUM = 1 AND
+              AZ-IN-PARM-NUM = 9 THEN
+             DISPLAY 'AZU0000I EXEC SQL SELECT_INTO'
+              ' : OUT=' 1 ' IN=' 9
+              ' L=' AZ-STMT-NUM
+             MOVE 6 TO AZ-GRP-INDEX
+             MOVE 0 TO AZ-FLAG-IN
+             MOVE RETURN-CODE TO AZ-RC-WORK
+             CALL 'GTMEMRC' USING TC-WORK-AREA OF AZ-INFO-BLOCK
+               AZ-GRP-INDEX AZ-FLAG-IN AZ-RECORD-PTR
+             SET ADDRESS OF AZ-WK-RECORD-COUNT TO AZ-RECORD-PTR
+             MOVE AZ-RC-WORK TO RETURN-CODE
+             ADD 1 TO AZ-WK-RECORD-COUNT
+             MOVE AZ-WK-RECORD-COUNT TO AZ-RECORD-COUNT-OT(1)
+             EVALUATE AZ-TEST(1:AZ-TEST-LEN)
+               WHEN SPACE
+                 CONTINUE
+               WHEN OTHER
+                 CONTINUE
+             END-EVALUATE
+           END-IF.
+           PERFORM TEARDOWN.
+      * SET INPUT VALUE
+      * DB2_OUTP_00E7_LGICDB01.
+           ENTRY 'DB2_OUTP_00E7_LGICDB01' USING AZ-TEST
+           AZ-INFO-BLOCK AZ-APLIST ARGI1 ARGI2 ARGI3 ARGI4 ARGI5 ARGI6
+           ARGI7 ARGI8 ARGI9.
+           DISPLAY 'AZU0000I DB2_00E7_LGICDB01 INPUT VALUES...'
+           MOVE 0 TO RETURN-CODE.
+           MOVE SQL-STMT-NUM OF AZ-APLIST TO AZ-STMT-NUM
+           SET ADDRESS OF AZ-SQLDA TO SQL-VPARMPTR
+           MOVE SQLDA-NUM OF AZ-SQLDA TO AZ-OUT-PARM-NUM
+           SET ADDRESS OF AZ-SQLDA TO SQL-APARMPTR
+           MOVE SQLDA-NUM OF AZ-SQLDA TO AZ-IN-PARM-NUM
+           MOVE 0 TO AZ-TEST-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+      * EXEC SQL SELECT_INTO : OUT=1 IN=9
+           IF AZ-OUT-PARM-NUM = 1 AND
+              AZ-IN-PARM-NUM = 9 THEN
+             DISPLAY 'AZU0000I EXEC SQL SELECT_INTO'
+              ' : OUT=' 1 ' IN=' 9
+              ' L=' AZ-STMT-NUM
+             MOVE 6 TO AZ-GRP-INDEX
+             MOVE 1 TO AZ-FLAG-IN
+             MOVE RETURN-CODE TO AZ-RC-WORK
+             CALL 'GTMEMRC' USING TC-WORK-AREA OF AZ-INFO-BLOCK
+               AZ-GRP-INDEX AZ-FLAG-IN AZ-RECORD-PTR
+             SET ADDRESS OF AZ-WK-RECORD-COUNT TO AZ-RECORD-PTR
+             MOVE AZ-RC-WORK TO RETURN-CODE
+             ADD 1 TO AZ-WK-RECORD-COUNT
+             MOVE AZ-WK-RECORD-COUNT TO AZ-RECORD-COUNT-IN(1)
+             EVALUATE AZ-TEST(1:AZ-TEST-LEN)
+               WHEN SPACE
+                 CONTINUE
+               WHEN OTHER
+                 CONTINUE
+             END-EVALUATE
+           END-IF.
+           PERFORM TEARDOWN.
+       TEARDOWN.
+           DISPLAY 'AZU0000I DB2_00E7_LGICDB01 SUCCESSFUL.'
+           GOBACK.
+       END PROGRAM 'DB2_00E7_LGICDB01'.
