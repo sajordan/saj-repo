@@ -25,8 +25,8 @@ def dbbGroovyzOpts= '-Dorg.slf4j.simpleLogger'
 //def dbbGroovyzOpts= '-Dorg.slf4j.simpleLogger -cp /u/user3/logging'
 // def dbbGroovyzOpts= '-DBB_PERSONAL_DAEMON -Dlog4j.configurationFile=/var/dbb/conf/log4j2.properties'
 // def dbbGroovyzOpts= '-Dlog4j.configurationFile=/var/dbb/conf/log4j2.properties -Djavax.net.debug=ssl,handshake:verbose -Djdk.tls.client.protocols=TLSv1.2 -Dcom.ibm.jsse2.overrideDefaultTLS=true -Dcom.ibm.jsse2.overrideDefaultProtocol=TLSv1.2 '
-def dbbBuildExtraOpts= '-zTest'
-//def dbbBuildExtraOpts= ''
+//def dbbBuildExtraOpts= '-zTest'
+def dbbBuildExtraOpts= ''
 
 def dbbCredentialOptions='-id SJORDAN -pf /u/sjordan/password.txt --url jdbc:db2://tvt7111.svl.ibm.com:5050/DBC1 '
 
